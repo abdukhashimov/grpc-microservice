@@ -72,3 +72,40 @@ func (l *loggerImpl) Error(msg string, fields ...Field) {
 func (l *loggerImpl) Fatal(msg string, fields ...Field) {
 	l.zap.Fatal(msg, fields...)
 }
+
+// I have no idea what is the purpose of lines below
+// GetNamed ...
+func GetNamed(l Logger, name string) Logger {
+	switch v := l.(type) {
+	case *loggerImpl:
+		v.zap = v.zap.Named(name)
+		return v
+	default:
+		l.Info("logger.GetNamed: invalid logger type")
+		return l
+	}
+}
+
+// WithFields ...
+func WithFields(l Logger, fields ...Field) Logger {
+	switch v := l.(type) {
+	case *loggerImpl:
+		return &loggerImpl{
+			zap: v.zap.With(fields...),
+		}
+	default:
+		l.Info("logger.WithFields: invalid logger type")
+		return l
+	}
+}
+
+// Cleanup ...
+func Cleanup(l Logger) error {
+	switch v := l.(type) {
+	case *loggerImpl:
+		return v.zap.Sync()
+	default:
+		l.Info("logger.Cleanup: invalid logger type")
+		return nil
+	}
+}
