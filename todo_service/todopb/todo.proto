@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package todo;
+option go_package="genproto/todopb";
+
+message Todo {
+    int32 id = 1;
+    string title = 2;
+    string description = 3;
+    bool done = 4;
+    string created_at = 5;
+    string updated_at = 6;
+}
+
+message Request {
+    int32 id = 1;
+}
+
+message Todos {
+    repeated Todo todo = 1;
+}
+
+message Empty {
+}
+
+service TodoServices {
+    rpc getTodo (Request) returns (Todo);
+    rpc getAllTodo (Empty) returns (Todos);
+    rpc updateTodo (Todo) returns (Todo);
+    rpc deleteTodo (Request) returns (Empty);
+    rpc createTodo (Todo) returns (Todo);
+}
