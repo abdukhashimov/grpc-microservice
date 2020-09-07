@@ -54,7 +54,7 @@ func New(level string, namespace string) Logger {
 }
 
 func (l *loggerImpl) Debug(msg string, fields ...Field) {
-	l.zap.Debug(msg, fields)
+	l.zap.Debug(msg, fields...)
 }
 
 func (l *loggerImpl) Info(msg string, fields ...Field) {
