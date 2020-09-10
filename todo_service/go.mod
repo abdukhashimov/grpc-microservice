@@ -8,5 +8,6 @@ require (
 	github.com/scylladb/gocqlx/v2 v2.1.0 // indirect
 	github.com/spf13/cast v1.3.1
 	go.uber.org/zap v1.16.0
+	google.golang.org/grpc v1.27.0
 	google.golang.org/protobuf v1.25.0
 )
