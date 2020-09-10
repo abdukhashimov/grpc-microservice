@@ -14,9 +14,10 @@ type todoRepo struct {
 }
 
 // it returns the sms Repo with session
-func NewSmsRepo(session *gocql.Session) repo.TodoStorateI {
+func NewTodoRepo(session *gocql.Session) repo.TodoStorateI {
 	return &todoRepo{session: session}
 }
+
 func (repo *todoRepo) Create(todo *todopb.Todo) (string, error) {
 	id, err := gocql.RandomUUID()
 	if err != nil {
@@ -117,12 +118,12 @@ func (repo *todoRepo) Delete(id string) error {
 	return nil
 }
 
-func (repo *todoRepo) GetAll(*todopb.Empty) (*todopb.Todos, error) {
-	query := repo.session.Query(`SELECT id, title, description, done, createdAt, updatedAt from todos`)
-	defer query.Release()
+// func (repo *todoRepo) GetAll(*todopb.Empty) (*todopb.Todos, error) {
+// 	query := repo.session.Query(`SELECT id, title, description, done, createdAt, updatedAt from todos`)
+// 	defer query.Release()
 
-	if err := query.Exec(); err != nil {
-		return nil, err
-	}
-	return nil, nil
-}
+// 	if err := query.Exec(); err != nil {
+// 		return nil, err
+// 	}
+// 	return nil, nil
+// }

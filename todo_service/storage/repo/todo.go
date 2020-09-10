@@ -11,5 +11,5 @@ type TodoStorateI interface {
 	Get(id string) (*todopb.Todo, error)
 	Update(todo *todopb.Todo) (*todopb.Todo, error)
 	Delete(id string) error
-	GetAll(todopb.Empty) (*todopb.Todos, error)
+	// GetAll(todopb.Empty) (*todopb.Todos, error)
 }
