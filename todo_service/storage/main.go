@@ -17,5 +17,12 @@ type storageCassandra struct {
 }
 
 func newStorageCassandra(session *gocql.Session) StorageI {
-	return &storageCassandra{session: session, todoRepo: cassandra.}
+	return &storageCassandra{
+		session:  session,
+		todoRepo: cassandra.NewTodoRepo(session),
+	}
+}
+
+func (s storageCassandra) Todo() repo.TodoStorateI {
+	return s.todoRepo
 }
