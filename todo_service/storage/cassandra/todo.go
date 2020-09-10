@@ -22,8 +22,8 @@ func (repo *todoRepo) Create(todo *todopb.Todo) (string, error) {
 		title,
 		description,
 		done,
-		created_at,
-		updated_at,
+		createdAt,
+		updatedAt,
 	) VALUES (?, ?, ?, ?, ?, ?)`,
 		id,
 		todo.GetTitle(),
@@ -35,4 +35,37 @@ func (repo *todoRepo) Create(todo *todopb.Todo) (string, error) {
 		return "", nil
 	}
 	return id.String(), nil
+}
+
+func (repo *todoRepo) Get(id string) (*todopb.Todo, error) {
+	var todo todopb.Todo
+	uuid, err := gocql.ParseUUID(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	query := repo.session.Query(`SELECT 
+		id,
+		title,
+		description,
+		done,
+		createdAt,
+		updatedAt FROM todos WHERE id = ?`, uuid)
+	var createdAt time.Time
+	var updatedAt time.Time
+
+	if err := query.Scan(
+		&todo.Id,
+		&todo.Title,
+		&todo.Description,
+		&createdAt,
+		&updatedAt,
+	); err != nil {
+		return nil, err
+	}
+	todo.CreatedAt = createdAt.String()
+	todo.UpdatedAt = updatedAt.String()
+
+	return &todo, nil
 }
