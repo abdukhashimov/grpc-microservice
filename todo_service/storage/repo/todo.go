@@ -1,9 +1,11 @@
 package repo
 
-import (
-	"github.com/abdukhashimov/blogcas/blog_service/todopb"
-)
+import "github.com/abdukhashimov/blogcas/todo_service/todopb"
 
+/*
+ *	Todo Storage interface includes the functions that must be implemented in
+ *	Storage that is inheriting it.
+ */
 type TodoStorateI interface {
 	Create(todo *todopb.Todo) (string, error)
 	Get(id string) (*todopb.Todo, error)
