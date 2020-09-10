@@ -1,6 +1,5 @@
 package logger
 
-// generate the level of Log according to the string
 // LogLevelFromString ...
 func LogLevelFromString(level string) int {
 	switch level {
