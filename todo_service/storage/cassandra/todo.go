@@ -1,6 +1,7 @@
 package cassandra
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/abdukhashimov/blogcas/todo_service/todopb"
@@ -68,4 +69,45 @@ func (repo *todoRepo) Get(id string) (*todopb.Todo, error) {
 	todo.UpdatedAt = updatedAt.String()
 
 	return &todo, nil
+}
+
+func (repo *todoRepo) Update(todo *todopb.Todo) (*todopb.Todo, error) {
+	o, err := repo.Get(fmt.Sprint(todo.GetId()))
+	if err != nil {
+		return nil, err
+	}
+	query := repo.session.Query(
+		`UPDATE todos SET 
+			title, 
+			description,
+			done, 
+			updatedAt 
+			WHERE id = ?`,
+		todo.GetTitle(),
+		todo.GetDescription(),
+		todo.GetDone(),
+		time.Now(),
+		o.GetId(),
+	)
+
+	if err := query.Exec(); err != nil {
+		return nil, err
+	}
+	return todo, nil
+}
+
+func (repo *todoRepo) Delete(id string) error {
+	o, err := repo.Get(id)
+
+	if err != nil {
+		return err
+	}
+
+	query := repo.session.Query(`DELETE from todos WHERE id = ?`, o.GetId())
+
+	if err := query.Exec(); err != nil {
+		return err
+	}
+
+	return nil
 }
